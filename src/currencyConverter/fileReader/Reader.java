@@ -16,15 +16,14 @@ public class Reader {
         return input;
     }
 
-    public static ArrayList read() {
-        File filePath = new File("E:/Java Projects/CurrencyConverter/src/resources/Currency.txt");
+    public static ArrayList read(File file) {
         Scanner scanner;
         String line = "";
         ArrayList<ForeignExchange> result = new ArrayList<>();
         ForeignExchange currency = null;
         int count = 0;
         try {
-            scanner = new Scanner(new FileReader(filePath));
+            scanner = new Scanner(new FileReader(file));
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
                 line = convert(line);
@@ -37,6 +36,11 @@ public class Reader {
             System.err.println("Error with loading file");
             ioException.printStackTrace();
         }
+        return result;
+    }
+
+    public static ArrayList importArr() {
+        ArrayList<ForeignExchange> result = read(new File("E:/Java Projects/CurrencyConverter/src/resources/Currency.txt"));
         return result;
     }
 }

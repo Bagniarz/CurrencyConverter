@@ -23,12 +23,8 @@ public class ForeignExchange {
         return new ForeignExchange(name, price);
     }
 
-
     @Override
     public String toString() {
-        return "Currency{" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                '}';
+        return "[" + name + "]" + " " + price;
     }
 }
