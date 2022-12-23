@@ -13,7 +13,11 @@ public class Menu {
         System.out.println("Menu: " + "\nStart" + "\nCurrency" + "\nQuit");
     }
 
-    public static ArrayList importCurrencyValues() {
+    public static void importCurrencyValuesXML() {
+        //TODO Implement a method to import currency values from xml file.
+    }
+
+    public static ArrayList importCurrencyValuesTxt() {
         ArrayList currencies = Reader.importArr();
         return currencies;
     }
@@ -47,6 +51,7 @@ public class Menu {
         return reverse;
     }
 
+    //TODO implement back method
     public static double convert(float price, boolean reverse) {
         System.out.println("Enter value which you want to convert");
         double input = UserInput.askUserDouble();
@@ -111,11 +116,11 @@ public class Menu {
             switch (input) {
                 case "s":
                 case "start":
-                    startConverter(importCurrencyValues());
+                    startConverter(importCurrencyValuesTxt());
                     break;
                 case "c":
                 case "currency":
-                    showCurrencies(importCurrencyValues());
+                    showCurrencies(importCurrencyValuesTxt());
                     break;
                 default:
                     closeProgram = true;
