@@ -36,10 +36,6 @@ public class ForeignExchange {
 
     @Override
     public String toString() {
-        return "ForeignExchange{" +
-                "name='" + name + '\'' +
-                ", abbreviation='" + abbreviation + '\'' +
-                ", price=" + price +
-                '}';
+        return abbreviation;
     }
 }
