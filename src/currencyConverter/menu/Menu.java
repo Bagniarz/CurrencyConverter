@@ -2,12 +2,13 @@ package currencyConverter.menu;
 
 import currencyConverter.converter.Converter;
 import currencyConverter.currency.ForeignExchange;
-import currencyConverter.fileReader.Reader;
+import currencyConverter.fileReader.TxtReader;
 import currencyConverter.userInput.UserInput;
 import java.util.ArrayList;
 
 public class Menu {
 
+    //TODO implement working currency exchange from xml database
 
     public static void printMenu() {
         System.out.println("Menu: " + "\nStart" + "\nCurrency" + "\nQuit");
@@ -18,7 +19,7 @@ public class Menu {
     }
 
     public static ArrayList importCurrencyValuesTxt() {
-        ArrayList currencies = Reader.importArr();
+        ArrayList currencies = TxtReader.txtImportArr();
         return currencies;
     }
 
@@ -52,7 +53,7 @@ public class Menu {
     }
 
     //TODO implement back method
-    public static double convert(float price, boolean reverse) {
+    public static double convert(double price, boolean reverse) {
         System.out.println("Enter value which you want to convert");
         double input = UserInput.askUserDouble();
         double result = 0;
@@ -81,7 +82,7 @@ public class Menu {
                 case "s":
                 case "start":
                     result = convert(currency.getPrice(), reverse);
-                    displayResult(result, currency.getName(), reverse);
+                    displayResult(result, currency.getAbbreviation(), reverse);
                     break;
                 case "r":
                 case "reverse":

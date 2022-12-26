@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class Reader {
+public class TxtReader {
 
     public static String convert(String input) {
         input = input.replace("," , ".");
         return input;
     }
 
-    public static ArrayList read(File file) {
+    public static ArrayList txtRead(File file) {
         Scanner scanner;
         String line = "";
         ArrayList<ForeignExchange> result = new ArrayList<>();
@@ -27,7 +27,7 @@ public class Reader {
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
                 line = convert(line);
-                currency = ForeignExchange.currency(line);
+                currency = ForeignExchange.txtCurrency(line);
                 result.add(count, currency);
                 count++;
             }
@@ -39,8 +39,8 @@ public class Reader {
         return result;
     }
 
-    public static ArrayList importArr() {
-        ArrayList<ForeignExchange> result = read(new File("E:/Java Projects/CurrencyConverter/src/resources/Currency.txt"));
+    public static ArrayList txtImportArr() {
+        ArrayList<ForeignExchange> result = txtRead(new File("E:/Java Projects/CurrencyConverter/src/resources/Currency.txt"));
         return result;
     }
 }
