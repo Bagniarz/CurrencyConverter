@@ -1,13 +1,8 @@
 package currencyConverter.currency;
 
 public class ForeignExchange {
-    String name;
-    String abbreviation;
-    double price;
-
-    public String getName() {
-        return name;
-    }
+    private final String abbreviation;
+    private final double price;
 
     public String getAbbreviation() {
         return abbreviation;
@@ -18,20 +13,26 @@ public class ForeignExchange {
     }
 
     public ForeignExchange(String name, String abbreviation, double price) {
-        this.name = name;
         this.abbreviation = abbreviation;
         this.price = price;
     }
 
     public ForeignExchange(String abbreviation, double price) {
-        this.abbreviation = abbreviation;
-        this.price = price;
+        this("", abbreviation, price);
     }
-
-    public static ForeignExchange txtCurrency(String line) {
+    //TODO split, truncate(need to implement myself)
+    public static ForeignExchange readCurrency(String line) {
         String name = line.substring(0,3);
         float price = Float.parseFloat(line.substring(4,8));
         return new ForeignExchange(name, price);
+    }
+
+    public static double convertCurrency(double value, double price) {
+        return value*price;
+    }
+
+    public static double convertCurrencyReverse(double value, double price) {
+        return value/price;
     }
 
     @Override

@@ -14,9 +14,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class XmlReader {
-    public static ArrayList importData(NodeList list) {
+import static currencyConverter.fileReader.TxtScanner.formatNumber;
+
+public class XmlScanner {
+    public static List<ForeignExchange> importData(NodeList list) {
 
         ArrayList<ForeignExchange> currencies = new ArrayList<>();
         ForeignExchange currency;
@@ -29,10 +32,15 @@ public class XmlReader {
 
                 String name = element.getElementsByTagName("nazwa_waluty").item(0).getTextContent();
                 String abbreviation = element.getElementsByTagName("kod_waluty").item(0).getTextContent();
+                /*
                 double price = Double.parseDouble(element
                         .getElementsByTagName("kurs_sredni")
                         .item(0).getTextContent()
                         .replace(",", "."));
+                 */
+                double price = Double.parseDouble(formatNumber(element
+                        .getElementsByTagName("kurs_sredni")
+                        .item(0).getTextContent()));
 
                 currency = new ForeignExchange(name, abbreviation, price);
                 currencies.add(i, currency);
@@ -56,9 +64,12 @@ public class XmlReader {
         return list;
     }
 
-    public static ArrayList ReadXML() {
-        ArrayList<ForeignExchange> currencies = importData(importNodeList());
-        return currencies;
+    public static List<ForeignExchange> importXml() {
+        return importData(importNodeList());
+    }
+
+    public static List<ForeignExchange> importXmlValues() {
+        return XmlScanner.importXml();
     }
 }
 

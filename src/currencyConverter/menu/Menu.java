@@ -1,16 +1,15 @@
 package currencyConverter.menu;
 
-import currencyConverter.converter.Converter;
 import currencyConverter.currency.ForeignExchange;
 import currencyConverter.userInput.UserInput;
-import java.util.ArrayList;
+import java.util.List;
 
-import static currencyConverter.menu.TxtMenu.importCurrencyValuesTxt;
-import static currencyConverter.menu.XmlMenu.importCurrencyValuesXML;
+import static currencyConverter.currency.ForeignExchange.convertCurrency;
+import static currencyConverter.currency.ForeignExchange.convertCurrencyReverse;
+import static currencyConverter.fileReader.TxtScanner.importTxtValues;
+import static currencyConverter.fileReader.XmlScanner.importXmlValues;
 
 public class Menu {
-
-    //TODO sort methods and classes in menu package
 
     public static void printMenu() {
         System.out.println("""
@@ -29,7 +28,7 @@ public class Menu {
         }
     }
 
-    public static void showCurrencies(ArrayList list) {
+    public static void showCurrencies(List<ForeignExchange> list) {
         int count = 0;
         for (Object currency : list) {
             System.out.println(count + ":" + currency);
@@ -38,53 +37,33 @@ public class Menu {
     }
 
     public static void printConvertMenu() {
-        System.out.println("Start" + "\nReverse" + "\nBack");
+        System.out.println("""
+                Start
+                Reverse
+                Back""");
     }
 
-    public static boolean reverse(boolean reverse) {
-        if (reverse) {
-            reverse = false;
-        } else {
-            reverse = true;
-        }
-        return reverse;
+    public static boolean reverseCurrency(boolean reverse) {
+        return !reverse;
     }
 
     public static double convert(double price, boolean reverse) {
         System.out.println("Enter value which you want to convert");
         double input = UserInput.askUserDouble();
-        double result = 0;
+        double result;
         if (reverse) {
-            result = Converter.convertCurrencyReverse(input, price);
+            result = convertCurrencyReverse(input, price);
         } else {
-            result = Converter.convertCurrency(input, price);
+            result = convertCurrency(input, price);
         }
         return result;
     }
 
-    public static void startConverter(ArrayList list) {
-        boolean returnToMenu = false;
-        while (!returnToMenu) {
-            showCurrencies(list);
-            System.out.println("Choose which currency you want to convert " +
-                    "(Use numbers before listed currencies or write -1 to go back)");
-            int input = UserInput.askUserInt();
-            if (input > 0 && input < list.size()) {
-                initConvert(list, input);
-            } else if(input > list.size()) {
-                System.out.println("You entered wrong number! Choosing first currency...");
-                initConvert(list, 0);
-            } else {
-                returnToMenu = true;
-            }
-        }
-    }
-
-    public static void initConvert(ArrayList list, int input) {
-        ForeignExchange currency = (ForeignExchange) list.get(input);
+    public static void initConvert(List<ForeignExchange> list, int input) {
+        ForeignExchange currency =  list.get(input);
         boolean reverse = false;
         boolean endConvert = false;
-        double result = 0;
+        double result;
         while (!endConvert) {
             if (reverse) {
                 System.out.println("You are converting PLN to " + list.get(input));
@@ -99,42 +78,63 @@ public class Menu {
                     result = convert(currency.getPrice(), reverse);
                     displayResult(result, currency.getAbbreviation(), reverse);
                 }
-                case "r", "reverse" -> reverse = reverse(reverse);
-                default -> endConvert = true;
+                case "r", "reverse" -> {
+                    reverse = reverseCurrency(reverse);
+                }
+                default -> {
+                    endConvert = true;
+                }
             }
         }
     }
 
-    //TODO implement enhanced switch
-    public static void startApp() {
+    public static void startApp(List<ForeignExchange> list) {
+        boolean returnToMenu = false;
+        while (!returnToMenu) {
+            showCurrencies(list);
+            System.out.println("Choose which currency you want to convert " +
+                    "(Use numbers before listed currencies or write -1 to go back)");
+            int input = UserInput.askUserInt();
+            if (input > -1 && input < list.size()) {
+                initConvert(list, input);
+                returnToMenu = true;
+            } else if(input > list.size()) {
+                System.out.println("You entered wrong number! Choosing first currency...");
+                initConvert(list, 0);
+                returnToMenu = true;
+            } else {
+                returnToMenu = true;
+            }
+        }
+    }
+
+    public static void startMenu() {
         boolean closeProgram = false;
         boolean xml = false;
         while (!closeProgram) {
             printMenu();
             String input = UserInput.askUserString();
             switch (input) {
-                case "s":
-                case "start":
+                case "s", "start" -> {
                     if (xml) {
-                        startConverter(importCurrencyValuesXML());
+                        startApp(importXmlValues());
                     } else {
-                        startConverter(importCurrencyValuesTxt());
+                        startApp(importTxtValues());
                     }
-                    break;
-                case "c":
-                case "currency":
+                }
+                case "c", "currency" -> {
                     if (xml) {
-                        showCurrencies(importCurrencyValuesXML());
+                        showCurrencies(importXmlValues());
                     } else {
-                        showCurrencies(importCurrencyValuesTxt());
+                        showCurrencies(importTxtValues());
                     }
-                    break;
-                case "x":
-                case "xml":
+                }
+                case "x", "xml" -> {
                     xml = true;
-                    break;
-                default:
+                }
+                default -> {
                     closeProgram = true;
+                }
             }
         }
     }
