@@ -49,27 +49,27 @@ public class XmlScanner {
         return currencies;
     }
 
-    public static NodeList importNodeList() {
+    public static NodeList importNodeList(String path) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        NodeList list = null;
         try {
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new File("src/resources/KursyWalut.xml"));
+            Document doc = db.parse(new File(path));
             doc.getDocumentElement().normalize();
-            list = doc.getElementsByTagName("pozycja");
+
+            return doc.getElementsByTagName("pozycja");
         } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
+            return null;
         }
-        return list;
     }
 
-    public static List<ForeignExchange> importXml() {
-        return importData(importNodeList());
+    public static List<ForeignExchange> importXml(String path) {
+        return importData(importNodeList(path));
     }
 
-    public static List<ForeignExchange> importXmlValues() {
-        return XmlScanner.importXml();
+    public static List<ForeignExchange> importXmlValues(String path) {
+        return XmlScanner.importXml(path);
     }
 }
 

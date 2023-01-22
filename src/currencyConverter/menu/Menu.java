@@ -1,13 +1,15 @@
 package currencyConverter.menu;
 
 import currencyConverter.currency.ForeignExchange;
+import currencyConverter.fileReader.TxtScanner;
+import currencyConverter.fileReader.XmlScanner;
+import currencyConverter.userInput.FileChooser;
 import currencyConverter.userInput.UserInput;
+
 import java.util.List;
 
 import static currencyConverter.currency.ForeignExchange.convertCurrency;
 import static currencyConverter.currency.ForeignExchange.convertCurrencyReverse;
-import static currencyConverter.fileReader.TxtScanner.importTxtValues;
-import static currencyConverter.fileReader.XmlScanner.importXmlValues;
 
 public class Menu {
 
@@ -60,7 +62,7 @@ public class Menu {
     }
 
     public static void initConvert(List<ForeignExchange> list, int input) {
-        ForeignExchange currency =  list.get(input);
+        ForeignExchange currency = list.get(input);
         boolean reverse = false;
         boolean endConvert = false;
         double result;
@@ -98,7 +100,7 @@ public class Menu {
             if (input > -1 && input < list.size()) {
                 initConvert(list, input);
                 returnToMenu = true;
-            } else if(input > list.size()) {
+            } else if (input > list.size()) {
                 System.out.println("You entered wrong number! Choosing first currency...");
                 initConvert(list, 0);
                 returnToMenu = true;
@@ -108,29 +110,31 @@ public class Menu {
         }
     }
 
-    public static void startMenu() {
+    //TODO Simplify cases;
+    public static void startMenu(String arg) {
         boolean closeProgram = false;
-        boolean xml = false;
+        FileChooser fileChooser = new FileChooser(arg);
         while (!closeProgram) {
             printMenu();
             String input = UserInput.askUserString();
             switch (input) {
                 case "s", "start" -> {
-                    if (xml) {
-                        startApp(importXmlValues());
-                    } else {
-                        startApp(importTxtValues());
+                    if (fileChooser.isValidPath(fileChooser)
+                            && fileChooser.getExtension(fileChooser.getArg()).equalsIgnoreCase("txt")) {
+                        startApp(TxtScanner.importTxtValues(fileChooser.getArg()));
+                    } else if (fileChooser.isValidPath(fileChooser)
+                            && fileChooser.getExtension(fileChooser.getArg()).equalsIgnoreCase("xml")) {
+                        startApp(XmlScanner.importXmlValues(fileChooser.getArg()));
                     }
                 }
-                case "c", "currency" -> {
-                    if (xml) {
-                        showCurrencies(importXmlValues());
-                    } else {
-                        showCurrencies(importTxtValues());
+                case "c", "currency", "show" , "sh" -> {
+                    if (fileChooser.isValidPath(fileChooser)
+                            && fileChooser.getExtension(fileChooser.getArg()).equalsIgnoreCase("txt")) {
+                        showCurrencies(TxtScanner.importTxtValues(fileChooser.getArg()));
+                    } else if (fileChooser.isValidPath(fileChooser)
+                            && fileChooser.getExtension(fileChooser.getArg()).equalsIgnoreCase("xml")) {
+                        showCurrencies(XmlScanner.importXmlValues(fileChooser.getArg()));
                     }
-                }
-                case "x", "xml" -> {
-                    xml = true;
                 }
                 default -> {
                     closeProgram = true;
@@ -139,5 +143,6 @@ public class Menu {
         }
     }
 }
+
 
 

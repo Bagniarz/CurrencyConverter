@@ -1,12 +1,16 @@
 package currencyConverter;
 
-import currencyConverter.currency.ForeignExchange;
-import currencyConverter.menu.Menu;
+import java.util.Arrays;
 
+import static currencyConverter.menu.Menu.startMenu;
 
 public class Main {
     public static void main(String[] args) {
-        Menu.startMenu();
+        if (args.length < 2) {
+            startMenu(args[0]);
+        } else {
+            System.out.println("Only 1 argument allowed!");
+        }
     }
 }
 

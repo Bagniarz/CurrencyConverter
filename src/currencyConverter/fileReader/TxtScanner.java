@@ -35,7 +35,7 @@ public class TxtScanner {
     }
 
     public static ForeignExchange createCurrency(String line) {
-        String[] arr = line.split(" ");
+        String[] arr = line.split("\\s"); // Do Zobaczenia
         String name = null;
         double price = 0;
         for (String element : arr) {
@@ -53,7 +53,7 @@ public class TxtScanner {
         Scanner scanner;
         String line = "";
         ArrayList<ForeignExchange> result = new ArrayList<>();
-        ForeignExchange currency = null;
+        ForeignExchange currency;
         try {
             scanner = new Scanner(new FileReader(file));
             while (scanner.hasNextLine()) {
@@ -71,11 +71,11 @@ public class TxtScanner {
     }
 
     //TODO Ask user about pathname;
-    public static List<ForeignExchange> importTxt() {
-        return readTxt(new File("E:/Java Projects/CurrencyConverter/src/resources/Currency.txt"));
+    public static List<ForeignExchange> importTxt(String path) {
+        return readTxt(new File(path));
     }
 
-    public static List<ForeignExchange> importTxtValues() {
-        return TxtScanner.importTxt();
+    public static List<ForeignExchange> importTxtValues(String path) {
+        return TxtScanner.importTxt(path);
     }
 }
