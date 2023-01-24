@@ -23,7 +23,7 @@ public class UserInput {
         if (!error && input > 0) {
             return input;
         } else {
-            return 0;
+            return -1;
         }
     }
     public static int askUserInt() {
@@ -40,7 +40,7 @@ public class UserInput {
         if (!error && input > 0) {
             return input;
         } else {
-            return 0;
+            return -1;
         }
     }
 }

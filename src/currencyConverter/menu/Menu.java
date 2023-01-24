@@ -1,6 +1,7 @@
 package currencyConverter.menu;
 
 import currencyConverter.currency.ForeignExchange;
+import currencyConverter.exceptions.NegativeNumberException;
 import currencyConverter.fileReader.TxtScanner;
 import currencyConverter.fileReader.XmlScanner;
 import currencyConverter.userInput.FileChooser;
@@ -18,7 +19,6 @@ public class Menu {
                 Menu:\s
                 Start
                 Currency
-                Xml
                 Quit""");
     }
 
@@ -49,19 +49,19 @@ public class Menu {
         return !reverse;
     }
 
-    public static double convert(double price, boolean reverse) {
+    public static double convert(ForeignExchange currency, boolean reverse) throws NegativeNumberException {
         System.out.println("Enter value which you want to convert");
         double input = UserInput.askUserDouble();
         double result;
         if (reverse) {
-            result = convertCurrencyReverse(input, price);
+            result = convertCurrencyReverse(input, currency);
         } else {
-            result = convertCurrency(input, price);
+            result = convertCurrency(input, currency);
         }
         return result;
     }
 
-    public static void initConvert(List<ForeignExchange> list, int input) {
+    public static void initConvert(List<ForeignExchange> list, int input) throws NegativeNumberException {
         ForeignExchange currency = list.get(input);
         boolean reverse = false;
         boolean endConvert = false;
@@ -77,7 +77,7 @@ public class Menu {
             String userString = UserInput.askUserString();
             switch (userString) {
                 case "s", "start" -> {
-                    result = convert(currency.getPrice(), reverse);
+                    result = convert(currency, reverse);
                     displayResult(result, currency.getAbbreviation(), reverse);
                 }
                 case "r", "reverse" -> {
@@ -90,7 +90,7 @@ public class Menu {
         }
     }
 
-    public static void startApp(List<ForeignExchange> list) {
+    public static void startApp(List<ForeignExchange> list) throws NegativeNumberException {
         boolean returnToMenu = false;
         while (!returnToMenu) {
             showCurrencies(list);
@@ -111,7 +111,7 @@ public class Menu {
     }
 
     //TODO Simplify cases;
-    public static void startMenu(String arg) {
+    public static void startMenu(String arg) throws NegativeNumberException {
         boolean closeProgram = false;
         FileChooser fileChooser = new FileChooser(arg);
         while (!closeProgram) {

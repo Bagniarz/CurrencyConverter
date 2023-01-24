@@ -32,15 +32,10 @@ public class XmlScanner {
 
                 String name = element.getElementsByTagName("nazwa_waluty").item(0).getTextContent();
                 String abbreviation = element.getElementsByTagName("kod_waluty").item(0).getTextContent();
-                /*
-                double price = Double.parseDouble(element
-                        .getElementsByTagName("kurs_sredni")
-                        .item(0).getTextContent()
-                        .replace(",", "."));
-                 */
                 double price = Double.parseDouble(formatNumber(element
                         .getElementsByTagName("kurs_sredni")
                         .item(0).getTextContent()));
+                price = ForeignExchange.truncate(price, 2);
 
                 currency = new ForeignExchange(name, abbreviation, price);
                 currencies.add(i, currency);

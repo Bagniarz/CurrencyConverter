@@ -16,10 +16,8 @@ public class TxtScanner {
 
     public static String formatNumber(String line) {
         NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
-        Number number;
         try {
-            number = format.parse(line);
-            return String.valueOf(number);
+            return format.parse(line).toString();
         } catch (ParseException e) {
             return "";
         }
@@ -35,13 +33,14 @@ public class TxtScanner {
     }
 
     public static ForeignExchange createCurrency(String line) {
-        String[] arr = line.split("\\s"); // Do Zobaczenia
+        String[] arr = line.split("\\s");
         String name = null;
         double price = 0;
         for (String element : arr) {
             boolean numeric = isNumber(formatNumber(element));
             if (numeric) {
                 price = Double.parseDouble(formatNumber(element));
+                price = ForeignExchange.truncate(price, 2);
             } else {
                 name = element;
             }
@@ -50,19 +49,16 @@ public class TxtScanner {
     }
 
     public static List<ForeignExchange> readTxt(File file) {
-        Scanner scanner;
         String line = "";
         ArrayList<ForeignExchange> result = new ArrayList<>();
         ForeignExchange currency;
-        try {
-            scanner = new Scanner(new FileReader(file));
+        try (Scanner scanner = new Scanner(new FileReader(file))) {
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
 
                 currency = createCurrency(line);
                 result.add(currency);
             }
-            scanner.close();
         } catch (IOException ioException) {
             System.err.println("Error with loading file");
             ioException.printStackTrace();
@@ -70,7 +66,6 @@ public class TxtScanner {
         return result;
     }
 
-    //TODO Ask user about pathname;
     public static List<ForeignExchange> importTxt(String path) {
         return readTxt(new File(path));
     }

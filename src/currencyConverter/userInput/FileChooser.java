@@ -21,19 +21,11 @@ public class FileChooser {
     }
 
     public boolean isArg(String arg) {
-        if (arg == null || arg.trim().isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return arg != null && !arg.trim().isEmpty();
     }
 
     public boolean isValidExtension(String path) {
-        if (path.contains(".txt") || path.contains(".xml")) {
-            return true;
-        } else {
-            return false;
-        }
+        return path.contains(".txt") || path.contains(".xml");
     }
 
     public boolean isValidPath(FileChooser fileChooser) {
