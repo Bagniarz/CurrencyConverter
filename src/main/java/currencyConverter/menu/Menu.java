@@ -49,19 +49,25 @@ public class Menu {
         return !reverse;
     }
 
-    public static double convert(ForeignExchange currency, boolean reverse) throws NegativeNumberException {
+    public static double convert(ForeignExchange currency, boolean reverse){
         System.out.println("Enter value which you want to convert");
         double input = UserInput.askUserDouble();
         double result;
-        if (reverse) {
-            result = convertCurrencyReverse(input, currency);
-        } else {
-            result = convertCurrency(input, currency);
+        try {
+            if (reverse) {
+                result = convertCurrencyReverse(input, currency);
+            } else {
+                result = convertCurrency(input, currency);
+            }
+        } catch (NegativeNumberException exception) {
+            System.out.println(exception);
+            System.out.println("Changing value to 0");
+            return 0;
         }
         return result;
     }
 
-    public static void initConvert(List<ForeignExchange> list, int input) throws NegativeNumberException {
+    public static void initConvert(List<ForeignExchange> list, int input) {
         ForeignExchange currency = list.get(input);
         boolean reverse = false;
         boolean endConvert = false;
@@ -90,7 +96,7 @@ public class Menu {
         }
     }
 
-    public static void startApp(List<ForeignExchange> list) throws NegativeNumberException {
+    public static void startApp(List<ForeignExchange> list) {
         boolean returnToMenu = false;
         while (!returnToMenu) {
             showCurrencies(list);
@@ -111,7 +117,7 @@ public class Menu {
     }
 
     //TODO Simplify cases;
-    public static void startMenu(String arg) throws NegativeNumberException {
+    public static void startMenu(String arg) {
         boolean closeProgram = false;
         FileChooser fileChooser = new FileChooser(arg);
         while (!closeProgram) {

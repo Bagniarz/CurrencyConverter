@@ -30,14 +30,13 @@ public class XmlScanner {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
 
-                String name = element.getElementsByTagName("nazwa_waluty").item(0).getTextContent();
                 String abbreviation = element.getElementsByTagName("kod_waluty").item(0).getTextContent();
                 double price = Double.parseDouble(formatNumber(element
                         .getElementsByTagName("kurs_sredni")
                         .item(0).getTextContent()));
                 price = ForeignExchange.truncate(price, 2);
 
-                currency = new ForeignExchange(name, abbreviation, price);
+                currency = new ForeignExchange(abbreviation, price);
                 currencies.add(i, currency);
             }
         }

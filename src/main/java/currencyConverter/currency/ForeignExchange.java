@@ -16,19 +16,11 @@ public class ForeignExchange {
         return price;
     }
 
-    public ForeignExchange(String name, String abbreviation, double price) {
+    public ForeignExchange(String abbreviation, double price) {
         this.abbreviation = abbreviation;
         this.price = price;
     }
 
-    public ForeignExchange(String abbreviation, double price) {
-        this("", abbreviation, price);
-    }
-    public static ForeignExchange readCurrency(String line) {
-        String name = line.substring(0,3);
-        float price = Float.parseFloat(line.substring(4,8));
-        return new ForeignExchange(name, price);
-    }
 
     public static double truncate(double number, int decimalPlace) {
         return (Math.floor(number * Math.pow(10, decimalPlace))) / Math.pow(10, decimalPlace);

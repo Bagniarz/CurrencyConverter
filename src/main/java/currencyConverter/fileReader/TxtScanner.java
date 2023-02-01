@@ -34,7 +34,7 @@ public class TxtScanner {
 
     public static ForeignExchange createCurrency(String line) {
         String[] arr = line.split("\\s");
-        String name = null;
+        String abbreviation = null;
         double price = 0;
         for (String element : arr) {
             boolean numeric = isNumber(formatNumber(element));
@@ -42,10 +42,10 @@ public class TxtScanner {
                 price = Double.parseDouble(formatNumber(element));
                 price = ForeignExchange.truncate(price, 2);
             } else {
-                name = element;
+                abbreviation = element;
             }
         }
-        return new ForeignExchange(name, price);
+        return new ForeignExchange(abbreviation, price);
     }
 
     public static List<ForeignExchange> readTxt(File file) {
